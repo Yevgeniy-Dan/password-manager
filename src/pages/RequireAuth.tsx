@@ -3,14 +3,22 @@ import { Navigate, useLocation } from "react-router-dom";
 import React from "react";
 
 const RequireAuth: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
+  const auth = useAppSelector((state) => state.auth);
   const location = useLocation();
 
-  if (!isAuth) {
-    return <Navigate to="/" replace state={{ from: location }} />;
+  if (auth.loading) {
+    return <h2>Loading...</h2>;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      {auth.isAuthenticated ? (
+        children
+      ) : (
+        <Navigate to="/" replace state={{ from: location }} />
+      )}
+    </>
+  );
 };
 
 export default RequireAuth;

@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { useNavigate, Link } from "react-router-dom";
 import { logOut } from "../store/auth-actions";
+import { authActions } from "../store/auth-slice";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -8,10 +9,12 @@ const Header: React.FC = () => {
   const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
 
   const loginHandler = () => {
+    dispatch(authActions.showError({ message: "" }));
     navigate("/login", { replace: true });
   };
 
   const signInHandler = () => {
+    dispatch(authActions.showError({ message: "" }));
     navigate("/register");
   };
 
@@ -22,50 +25,40 @@ const Header: React.FC = () => {
   };
 
   return (
-      <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <p className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
-          <span className="fs-4">PasswordManager</span>
-        </p>
+    <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+      <p className="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+        <span className="fs-4">PasswordManager</span>
+      </p>
 
-        <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-          {isAuth && (
-            <li>
-              <Link to="/dashboard" className="nav-link px-2 link-secondary">
-                Dashboard
-              </Link>
-            </li>
-          )}
-        </ul>
-
-        <div className="col-md-3 text-end">
-          {!isAuth ? (
-            <>
-              <button
-                onClick={loginHandler}
-                type="button"
-                className="btn btn-outline-primary me-2"
-              >
-                Login
-              </button>
-              <button
-                onClick={signInHandler}
-                type="button"
-                className="btn btn-warning"
-              >
-                Sign-up
-              </button>
-            </>
-          ) : (
+      <div className="col-md-3 text-end">
+        {!isAuth ? (
+          <>
             <button
-              onClick={logoutHandle}
+              onClick={loginHandler}
+              type="button"
+              className="btn btn-outline-primary me-2"
+            >
+              Login
+            </button>
+            <button
+              onClick={signInHandler}
               type="button"
               className="btn btn-warning"
             >
-              Logout
+              Sign-up
             </button>
-          )}
-        </div>
-      </header>
+          </>
+        ) : (
+          <button
+            onClick={logoutHandle}
+            type="button"
+            className="btn btn-warning"
+          >
+            Logout
+          </button>
+        )}
+      </div>
+    </header>
   );
 };
 

@@ -1,3 +1,8 @@
 .fullScreen {
   height: 100vh;
 }
+
+.form {
+  width: 100%;
+  max-width: 35rem;
+}

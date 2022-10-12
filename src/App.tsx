@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAppDispatch } from "./hooks/redux";
+import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Dashboard from "./components/Dashboard";
@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Layout from "./pages/Layout";
 import RequireAuth from "./pages/RequireAuth";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -31,6 +32,8 @@ function App() {
             </RequireAuth>
           }
         />
+
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
