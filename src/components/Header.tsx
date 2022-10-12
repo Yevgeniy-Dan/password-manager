@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { logOut } from "../store/auth-actions";
 import { authActions } from "../store/auth-slice";
 
