@@ -1,21 +1,24 @@
 import React, { useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Form, Button } from "react-bootstrap";
-import { useAppDispatch } from "../hooks/redux";
 import { signIn } from "../store/auth-actions";
 import classes from "./Login.module.css";
 
 const Register: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const loginInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const signInHandle = (event: React.FormEvent) => {
+  const signInHandle = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    dispatch(
-      signIn(loginInputRef.current!.value, passwordInputRef.current!.value)
-    );
+    const origin = location.state?.from?.pathname || "/dashboard";
+
+    await signIn(loginInputRef.current!.value, passwordInputRef.current!.value);
+
+    navigate(origin);
   };
 
   return (

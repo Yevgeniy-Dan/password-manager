@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./hooks/redux";
+import { useAppDispatch } from "./hooks/redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Dashboard from "./components/Dashboard";

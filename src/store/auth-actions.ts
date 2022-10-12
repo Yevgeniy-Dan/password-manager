@@ -16,6 +16,7 @@ export const getCurrentUser = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         dispatch(authActions.login());
+        console.log("gru: ", user);
       } else {
         dispatch(authActions.logout());
       }
@@ -23,30 +24,26 @@ export const getCurrentUser = () => {
   };
 };
 
-export const signIn = (email: string, password: string) => {
-  return async (dispatch: AppDispatch) => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      dispatch(authActions.login());
-    } catch (error) {
-      // Notification with error can't create new user
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
-    }
-  };
+export const signIn = async (email: string, password: string) => {
+  try {
+    await createUserWithEmailAndPassword(auth, email, password);
+    console.log("signIn: ", auth.currentUser);
+  } catch (error) {
+    // Notification with error can't create new user
+    // const errorCode = error.code;
+    // const errorMessage = error.message;
+  }
 };
 
-export const logIn = (email: string, password: string) => {
-  return async (dispatch: AppDispatch) => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      dispatch(authActions.login());
-    } catch (error) {
-      // Notification with error can't create new user
-      // const errorCode = error.code;
-      // const errorMessage = error.message;
-    }
-  };
+export const logIn = async (email: string, password: string) => {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    console.log("logIn: ", auth.currentUser);
+  } catch (error) {
+    // Notification with error can't create new user
+    // const errorCode = error.code;
+    // const errorMessage = error.message;
+  }
 };
 
 export const logOut = () => {
