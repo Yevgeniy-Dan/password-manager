@@ -1,18 +1,11 @@
-import { async } from "@firebase/util";
 import { getAuth } from "firebase/auth";
-import {
-  doc,
-  addDoc,
-  collection,
-  deleteDoc,
-  getDocs,
-  writeBatch,
-} from "firebase/firestore";
+import { doc, collection, getDocs, writeBatch } from "firebase/firestore";
 
 import { AppDispatch } from ".";
 import db from "../config/firebase.config";
 import PasswordCard from "../models/password-card";
 import { passwordCardsActions } from "./password-cards-slice";
+import { uiActions } from "./ui-slice";
 
 const auth = getAuth();
 
@@ -48,13 +41,35 @@ export const fetchPasswordCardsData = () => {
         })
       );
     } catch (error) {
-      // Notification with fetch data error
+      dispatch(
+        uiActions.showNotification({
+          notification: {
+            status: "error",
+            title: "Error",
+            message: "Fetching password cards failed",
+          },
+        })
+      );
+    } finally {
+      setTimeout(() => {
+        dispatch(uiActions.showNotification({ notification: null }));
+      }, 5000);
     }
   };
 };
 
 export const sendPasswordCardsData = (cards: PasswordCard[]) => {
   return async (dispatch: AppDispatch) => {
+    dispatch(
+      uiActions.showNotification({
+        notification: {
+          status: "pending",
+          title: "Sending...",
+          message: "Sending password cards",
+        },
+      })
+    );
+
     const sendRequest = async () => {
       const querySnapshot = await getDocs(
         collection(db, `users/${auth.currentUser?.uid}/password-cards`)
@@ -110,14 +125,33 @@ export const sendPasswordCardsData = (cards: PasswordCard[]) => {
       });
 
       await batch.commit();
-
-      console.log(deletableData);
     };
 
     try {
       await sendRequest();
+      dispatch(
+        uiActions.showNotification({
+          notification: {
+            status: "success",
+            title: "Success",
+            message: "Password cards successfully updated",
+          },
+        })
+      );
     } catch (error) {
-      // Notification about error
+      dispatch(
+        uiActions.showNotification({
+          notification: {
+            status: "error",
+            title: "Error",
+            message: "Sending password cards failed",
+          },
+        })
+      );
+    } finally {
+      setTimeout(() => {
+        dispatch(uiActions.showNotification({ notification: null }));
+      }, 5000);
     }
   };
 };

@@ -5,11 +5,13 @@ import {
   fetchPasswordCardsData,
   sendPasswordCardsData,
 } from "../store/password-cards-actions";
+import Notification from "./Notification";
 import PasswordCard, { EmptyPasswordCard } from "./PasswordCard";
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const passwordCards = useAppSelector((state) => state.passwordCard);
+  const notification = useAppSelector((state) => state.ui.notification);
 
   useEffect(() => {
     dispatch(fetchPasswordCardsData());
@@ -23,6 +25,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div>
+      {notification && <Notification notification={notification} />}
       <h1>Dashboard</h1>
       <Container>
         <Row>

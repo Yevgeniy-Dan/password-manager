@@ -57,7 +57,6 @@ const PasswordCardModal: React.FC<
   };
 
   const deleteHandler = () => {
-    // Delete Logic
     cardData &&
       dispatch(
         passwordCardsActions.removeCardFromCards({ item: { ...cardData } })
@@ -73,7 +72,7 @@ const PasswordCardModal: React.FC<
   };
 
   return (
-    <Modal show={show} onHide={closeHandle}>
+    <Modal show={show} onHide={closeHandle} centered>
       <Modal.Header closeButton>
         <Modal.Title>{cardData ? "Edit" : "Add"} Password Card</Modal.Title>
       </Modal.Header>
@@ -86,7 +85,6 @@ const PasswordCardModal: React.FC<
               type="text"
               ref={serviceNameInputRef}
               defaultValue={cardData?.serviceName || ""}
-              // value={cardData?.serviceName || ""}
             />
             <Form.Control.Feedback type="invalid">
               Please provide a valid service name
@@ -100,7 +98,6 @@ const PasswordCardModal: React.FC<
                 ref={passwordInputRef}
                 type={showPass ? "text" : "password"}
                 defaultValue={cardData?.password || ""}
-                // value={cardData?.password || ""}
               />
               <InputGroup.Text>
                 {showPass ? (
