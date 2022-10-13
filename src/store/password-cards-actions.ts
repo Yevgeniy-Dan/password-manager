@@ -37,7 +37,7 @@ export const fetchPasswordCardsData = () => {
 
       dispatch(
         passwordCardsActions.replaceCards({
-          items: passwordCardsData || [],
+          items: passwordCardsData,
         })
       );
     } catch (error) {

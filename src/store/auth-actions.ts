@@ -12,6 +12,7 @@ import isFirebaseError, {
   getFirebaseErrorMessage,
 } from "../models/firebaseErrorCode";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { passwordCardsActions } from "./password-cards-slice";
 
 const auth = getAuth(app);
 
@@ -67,6 +68,7 @@ export const logOut = () => {
   return async (dispatch: AppDispatch) => {
     try {
       await firebaseSignOut(auth);
+      dispatch(passwordCardsActions.changeValueByLogout());
       dispatch(authActions.logout());
     } catch (error) {
       if (isFirebaseError(error)) {

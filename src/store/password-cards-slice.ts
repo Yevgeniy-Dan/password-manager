@@ -46,6 +46,9 @@ const passwordCardsSlice = createSlice({
         existingItem.serviceName = editItem.serviceName;
       }
     },
+    changeValueByLogout(state) {
+      state.changed = false;
+    },
   },
 });
 
