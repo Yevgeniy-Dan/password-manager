@@ -1,5 +1,5 @@
 import { Alert } from "react-bootstrap";
-import NotificationModel from "../models/notification";
+import NotificationModel from "../../models/notification";
 
 const Notification: React.FC<
   React.PropsWithChildren<{ notification: NotificationModel }>

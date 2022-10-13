@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import { Button, Col, Form, InputGroup, Modal } from "react-bootstrap";
-import { useAppDispatch } from "../hooks/redux";
-import { passwordCardsActions } from "../store/password-cards-slice";
+import { useAppDispatch } from "../../hooks/redux";
+import { passwordCardsActions } from "../../store/dashboard/password-cards-slice";
 import { IoEyeSharp, IoEyeOff } from "react-icons/io5";
 
-import PasswordCard from "../models/password-card";
+import PasswordCard from "../../models/password-card";
 
 const PasswordCardModal: React.FC<
   React.PropsWithChildren<{

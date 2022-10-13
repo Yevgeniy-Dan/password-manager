@@ -1,11 +1,11 @@
 import { getAuth } from "firebase/auth";
 import { doc, collection, getDocs, writeBatch } from "firebase/firestore";
 
-import { AppDispatch } from ".";
-import db from "../config/firebase.config";
-import PasswordCard from "../models/password-card";
+import { AppDispatch } from "..";
+import db from "../../config/firebase.config";
+import PasswordCard from "../../models/password-card";
 import { passwordCardsActions } from "./password-cards-slice";
-import { uiActions } from "./ui-slice";
+import { uiActions } from "../ui/ui-slice";
 
 const auth = getAuth();
 

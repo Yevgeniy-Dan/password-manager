@@ -5,14 +5,14 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { AppDispatch } from ".";
-import db, { app } from "../config/firebase.config";
+import { AppDispatch } from "..";
+import db, { app } from "../../config/firebase.config";
 import { authActions } from "./auth-slice";
 import isFirebaseError, {
   getFirebaseErrorMessage,
-} from "../models/firebaseErrorCode";
-import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { passwordCardsActions } from "./password-cards-slice";
+} from "../../models/firebaseErrorCode";
+import { doc, setDoc } from "firebase/firestore";
+import { passwordCardsActions } from "../dashboard/password-cards-slice";
 
 const auth = getAuth(app);
 

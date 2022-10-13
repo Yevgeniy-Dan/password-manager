@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useNavigate } from "react-router-dom";
-import { logOut } from "../store/auth-actions";
-import { authActions } from "../store/auth-slice";
+import { logOut } from "../../store/auth/auth-actions";
+import { authActions } from "../../store/auth/auth-slice";
 
-const Header: React.FC = () => {
+const MainHeader: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector((state) => state.auth.isAuthenticated);
@@ -62,4 +62,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default MainHeader;

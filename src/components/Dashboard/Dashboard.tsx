@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import {
   fetchPasswordCardsData,
   sendPasswordCardsData,
-} from "../store/password-cards-actions";
-import Notification from "./Notification";
+} from "../../store/dashboard/password-cards-actions";
+import Notification from "../UI/Notification";
 import PasswordCard, { EmptyPasswordCard } from "./PasswordCard";
 
 const Dashboard: React.FC = () => {

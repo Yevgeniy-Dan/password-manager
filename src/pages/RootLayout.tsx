@@ -1,9 +1,9 @@
-import Header from "../components/Header";
+import MainHeader from "../components/Layout/MainHeader";
 
 const RootLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div>
-      <Header />
+      <MainHeader />
       {children}
     </div>
   );

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import PasswordCard from "../models/password-card";
+import PasswordCard from "../../models/password-card";
 
 type InitialState = {
   items: PasswordCard[];

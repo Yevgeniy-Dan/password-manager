@@ -1,25 +1,25 @@
-import React, { useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { signIn } from "../store/auth-actions";
+import { logIn } from "../../store/auth/auth-actions";
+import { useNavigate, useLocation } from "react-router-dom";
 import classes from "./Login.module.css";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
-const Register: React.FC = () => {
+const Login: React.FC = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const auth = useAppSelector((state) => state.auth);
 
   const loginInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const signInHandle = async (event: React.FormEvent) => {
+  const logInHandle = (event: React.FormEvent) => {
     event.preventDefault();
 
     dispatch(
-      signIn(loginInputRef.current!.value, passwordInputRef.current!.value)
+      logIn(loginInputRef.current!.value, passwordInputRef.current!.value)
     );
   };
 
@@ -29,8 +29,8 @@ const Register: React.FC = () => {
   }, [auth.isAuthenticated, navigate, location]);
 
   return (
-    <Container className={` d-flex  justify-content-center align-items-center`}>
-      <Form onSubmit={signInHandle} className={classes.form}>
+    <Container className={`d-flex  justify-content-center align-items-center`}>
+      <Form onSubmit={logInHandle} className={classes.form}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -56,11 +56,11 @@ const Register: React.FC = () => {
         )}
 
         <Button variant="primary" type="submit">
-          Register
+          Login
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default Register;
+export default Login;

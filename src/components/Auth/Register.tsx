@@ -1,25 +1,25 @@
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Container, Form, Button, Alert } from "react-bootstrap";
-import { logIn } from "../store/auth-actions";
-import { useNavigate, useLocation } from "react-router-dom";
+import { signIn } from "../../store/auth/auth-actions";
 import classes from "./Login.module.css";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 
-const Login: React.FC = () => {
-  const navigate = useNavigate();
+const Register: React.FC = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const auth = useAppSelector((state) => state.auth);
 
   const loginInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const logInHandle = (event: React.FormEvent) => {
+  const signInHandle = async (event: React.FormEvent) => {
     event.preventDefault();
 
     dispatch(
-      logIn(loginInputRef.current!.value, passwordInputRef.current!.value)
+      signIn(loginInputRef.current!.value, passwordInputRef.current!.value)
     );
   };
 
@@ -29,8 +29,8 @@ const Login: React.FC = () => {
   }, [auth.isAuthenticated, navigate, location]);
 
   return (
-    <Container className={`d-flex  justify-content-center align-items-center`}>
-      <Form onSubmit={logInHandle} className={classes.form}>
+    <Container className={` d-flex  justify-content-center align-items-center`}>
+      <Form onSubmit={signInHandle} className={classes.form}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control
@@ -56,11 +56,11 @@ const Login: React.FC = () => {
         )}
 
         <Button variant="primary" type="submit">
-          Login
+          Register
         </Button>
       </Form>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

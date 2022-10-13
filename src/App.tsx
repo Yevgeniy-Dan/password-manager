@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 import { useAppDispatch } from "./hooks/redux";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-import Dashboard from "./components/Dashboard";
-import { getCurrentUser } from "./store/auth-actions";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Dashboard from "./components/Dashboard/Dashboard";
+import { getCurrentUser } from "./store/auth/auth-actions";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
 import Layout from "./pages/Layout";
 import RequireAuth from "./pages/RequireAuth";
 import NotFound from "./pages/NotFound";
