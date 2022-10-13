@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Button, Form, InputGroup, Modal } from "react-bootstrap";
+import { Button, Col, Form, InputGroup, Modal } from "react-bootstrap";
 import { useAppDispatch } from "../hooks/redux";
 import { passwordCardsActions } from "../store/password-cards-slice";
 import { IoEyeSharp, IoEyeOff } from "react-icons/io5";
@@ -12,7 +12,7 @@ const PasswordCardModal: React.FC<
     cardData?: PasswordCard;
     onSubmit: () => void;
   }>
-> = ({ show, cardData = null, onSubmit }) => {
+> = ({ show, cardData, onSubmit }) => {
   const [showPass, setShowPass] = useState(false);
 
   const serviceNameInputRef = useRef<HTMLInputElement>(null);
@@ -39,14 +39,12 @@ const PasswordCardModal: React.FC<
       event.stopPropagation();
     } else {
       if (cardData) {
-        console.log("edit");
         dispatch(
           passwordCardsActions.editCard({
             editItem: { id: cardData.id, serviceName, password },
           })
         );
       } else {
-        console.log("add");
         const newCard = new PasswordCard(serviceName, password);
         dispatch(
           passwordCardsActions.addCardToCards({
@@ -56,6 +54,14 @@ const PasswordCardModal: React.FC<
       }
       closeHandle();
     }
+  };
+
+  const deleteHandler = () => {
+    // Delete Logic
+    cardData &&
+      dispatch(
+        passwordCardsActions.removeCardFromCards({ item: { ...cardData } })
+      );
   };
 
   const clearForm = () => {
@@ -109,13 +115,22 @@ const PasswordCardModal: React.FC<
               </Form.Control.Feedback>
             </InputGroup>
           </Form.Group>
-          <Modal.Footer className="pb-0">
-            <Button variant="secondary" onClick={closeHandle}>
-              Close
-            </Button>
-            <Button variant="primary" type="submit">
-              Save Changes
-            </Button>
+          <Modal.Footer className="pb-0 px-0 d-flex justify-content-between">
+            <Col>
+              {cardData && (
+                <Button variant="danger" onClick={deleteHandler}>
+                  Delete
+                </Button>
+              )}
+            </Col>
+            <Col className="d-flex justify-content-between">
+              <Button variant="secondary" onClick={closeHandle}>
+                Close
+              </Button>
+              <Button variant="primary" type="submit">
+                Save Changes
+              </Button>
+            </Col>
           </Modal.Footer>
         </Form>
       </Modal.Body>

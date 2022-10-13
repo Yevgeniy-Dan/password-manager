@@ -67,9 +67,13 @@ export const sendPasswordCardsData = (cards: PasswordCard[]) => {
         (card) => !querySnapshot.docs.some((doc) => card.id === doc.data().id)
       );
       const deletableData = querySnapshot.docs
-        .filter((doc) => cards.some((card) => card.id === doc.id))
-        .map((doc) => {
-          return doc.data();
+        .filter((doc) => !cards.some((card) => doc.id === card.id))
+        .map((card) => {
+          return {
+            id: card.id,
+            serviceName: card.data().serviceName,
+            password: card.data().password,
+          };
         });
 
       let batch = writeBatch(db);
@@ -96,19 +100,18 @@ export const sendPasswordCardsData = (cards: PasswordCard[]) => {
         });
       });
 
-      // deletableData.forEach((item) => {
-      //   let docRef = doc(
-      //     db,
-      //     `users/${auth.currentUser?.uid}/password-cards`,
-      //     item.id
-      //   );
+      deletableData.forEach((item) => {
+        let docRef = doc(
+          collection(db, `users/${auth.currentUser?.uid}/password-cards`),
+          item.id
+        );
 
-      //   batch.delete(docRef);
-      // });
+        batch.delete(docRef);
+      });
 
       await batch.commit();
 
-      // console.log(deletableData);
+      console.log(deletableData);
     };
 
     try {
