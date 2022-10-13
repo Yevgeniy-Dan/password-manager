@@ -1,15 +1,25 @@
 import { useEffect } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { useAppDispatch } from "../hooks/redux";
-import { fetchPasswordCardsData } from "../store/password-cards-actions";
-import PasswordCard from "./PasswordCard";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import {
+  fetchPasswordCardsData,
+  sendPasswordCardsData,
+} from "../store/password-cards-actions";
+import PasswordCard, { EmptyPasswordCard } from "./PasswordCard";
 
 const Dashboard: React.FC = () => {
   const dispatch = useAppDispatch();
+  const passwordCards = useAppSelector((state) => state.passwordCard);
 
   useEffect(() => {
     dispatch(fetchPasswordCardsData());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (passwordCards.changed) {
+      dispatch(sendPasswordCardsData(passwordCards.items));
+    }
+  }, [passwordCards, dispatch]);
 
   return (
     <div>
@@ -17,17 +27,15 @@ const Dashboard: React.FC = () => {
       <Container>
         <Row>
           <Col sm={6} md={4}>
-            <PasswordCard type="addCard" />
+            <EmptyPasswordCard />
           </Col>
-          <Col sm={6} md={4}>
-            <PasswordCard
-              card={{
-                id: "1",
-                password: "123456",
-                serviceName: "Git",
-              }}
-            />
-          </Col>
+          {passwordCards.items.map((card) => {
+            return (
+              <Col sm={6} md={4} key={card.id}>
+                <PasswordCard card={card} />
+              </Col>
+            );
+          })}
         </Row>
       </Container>
     </div>

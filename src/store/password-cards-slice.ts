@@ -3,12 +3,12 @@ import PasswordCard from "../models/password-card";
 
 type InitialState = {
   items: PasswordCard[];
-  displayedCard: PasswordCard | undefined;
+  changed: boolean;
 };
 
 const initialState: InitialState = {
   items: [],
-  displayedCard: undefined,
+  changed: false,
 };
 
 const passwordCardsSlice = createSlice({
@@ -17,10 +17,9 @@ const passwordCardsSlice = createSlice({
   reducers: {
     replaceCards(state, action: PayloadAction<{ items: PasswordCard[] }>) {
       state.items = action.payload.items;
-      state.displayedCard = undefined;
     },
-    addItemToCards(state, action: PayloadAction<{ item: PasswordCard }>) {
-      state.displayedCard = undefined;
+    addCardToCards(state, action: PayloadAction<{ item: PasswordCard }>) {
+      state.changed = true;
 
       const newItem = action.payload.item;
 
@@ -30,27 +29,22 @@ const passwordCardsSlice = createSlice({
         serviceName: newItem.serviceName,
       });
     },
-    removeItemFromCards(state, action: PayloadAction<{ item: PasswordCard }>) {
-      state.displayedCard = undefined;
+    removeCardFromCards(state, action: PayloadAction<{ item: PasswordCard }>) {
+      state.changed = true;
 
       const id = action.payload.item.id;
       state.items = state.items.filter((item) => item.id !== id);
     },
-    editItem(state, action: PayloadAction<{ item: PasswordCard }>) {
-      state.displayedCard = undefined;
+    editCard(state, action: PayloadAction<{ editItem: PasswordCard }>) {
+      state.changed = true;
 
-      const editItem = action.payload.item;
+      const editItem = action.payload.editItem;
       const existingItem = state.items.find((item) => item.id === editItem.id);
 
       if (existingItem) {
         existingItem.password = editItem.password;
         existingItem.serviceName = editItem.serviceName;
       }
-    },
-    revealItem(state, action: PayloadAction<{ id: string }>) {
-      state.displayedCard = state.items.find(
-        (item) => item.id === action.payload.id
-      );
     },
   },
 });

@@ -1,8 +1,17 @@
+import { async } from "@firebase/util";
 import { getAuth } from "firebase/auth";
-import { collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  addDoc,
+  collection,
+  deleteDoc,
+  getDocs,
+  writeBatch,
+} from "firebase/firestore";
 
 import { AppDispatch } from ".";
 import db from "../config/firebase.config";
+import PasswordCard from "../models/password-card";
 import { passwordCardsActions } from "./password-cards-slice";
 
 const auth = getAuth();
@@ -14,35 +23,98 @@ export const fetchPasswordCardsData = () => {
         db,
         `users/${auth.currentUser?.uid}/password-cards`
       );
-      const userDataResponse = await getDocs(userCollectionRef);
+      const querySnapshot = await getDocs(userCollectionRef);
 
-      if (userDataResponse.docs.length === 0) {
-        return { items: [] };
-        // return [];
+      if (querySnapshot.docs.length === 0) {
+        return [];
       } else {
-        userDataResponse.docs.forEach((item) => {
-          console.log(item.data);
-          //   return {
-          //     id: item.id,
-          //     serviceName: item.data,
-          //   };
+        const cards = querySnapshot.docs.map((item) => {
+          return {
+            id: item.id,
+            serviceName: item.data().serviceName,
+            password: item.data().password,
+          };
         });
+        return cards;
       }
-
-      return { items: [] };
-      //   return userDataResponse.docs;
     };
 
     try {
-      const passwordCardsData = await fetchData();
+      const passwordCardsData: PasswordCard[] = await fetchData();
 
       dispatch(
         passwordCardsActions.replaceCards({
-          items: passwordCardsData.items || [],
+          items: passwordCardsData || [],
         })
       );
     } catch (error) {
       // Notification with fetch data error
+    }
+  };
+};
+
+export const sendPasswordCardsData = (cards: PasswordCard[]) => {
+  return async (dispatch: AppDispatch) => {
+    const sendRequest = async () => {
+      const querySnapshot = await getDocs(
+        collection(db, `users/${auth.currentUser?.uid}/password-cards`)
+      );
+
+      const editableData = cards.filter((card) =>
+        querySnapshot.docs.some((doc) => card.id === doc.data().id)
+      );
+      const addableData = cards.filter(
+        (card) => !querySnapshot.docs.some((doc) => card.id === doc.data().id)
+      );
+      const deletableData = querySnapshot.docs
+        .filter((doc) => cards.some((card) => card.id === doc.id))
+        .map((doc) => {
+          return doc.data();
+        });
+
+      let batch = writeBatch(db);
+
+      addableData.forEach((item) => {
+        let docRef = doc(
+          collection(db, `users/${auth.currentUser?.uid}/password-cards`),
+          item.id
+        );
+        batch.set(docRef, {
+          serviceName: item.serviceName,
+          password: item.password,
+        });
+      });
+
+      editableData.forEach((item) => {
+        let docRef = doc(
+          collection(db, `users/${auth.currentUser?.uid}/password-cards`),
+          item.id
+        );
+        batch.update(docRef, {
+          serviceName: item.serviceName,
+          password: item.password,
+        });
+      });
+
+      // deletableData.forEach((item) => {
+      //   let docRef = doc(
+      //     db,
+      //     `users/${auth.currentUser?.uid}/password-cards`,
+      //     item.id
+      //   );
+
+      //   batch.delete(docRef);
+      // });
+
+      await batch.commit();
+
+      // console.log(deletableData);
+    };
+
+    try {
+      await sendRequest();
+    } catch (error) {
+      // Notification about error
     }
   };
 };
